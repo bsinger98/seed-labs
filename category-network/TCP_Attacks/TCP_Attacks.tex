@@ -16,7 +16,7 @@
 \newcommand{\telnet} {\texttt{telnet}\xspace}
 \newcommand{\tcpFigs}{./Figs}
 
-\lhead{\bfseries SEED Labs -- TCP Attacks Lab}
+\lhead{\bfseries SEED Labs -- TCP Attacks Lab -- Edited by: Brian Singer and Vyas Sekar}
 
 \begin{document}
 
@@ -127,6 +127,15 @@ but it will be much more convenient to use containers.
 % SUBSECTION
 % -------------------------------------------
 \subsection{Container Setup and Commands}
+
+The Labsetup files can be found on Canvas or at these links. 
+The links may be easier to download on the VM because it does not require logging into Canvas.
+
+Intel: \url{https://seedsecuritylabs.org/Labs_20.04/Files/TCP_Attacks/Labsetup.zip}
+
+Arm: \url{https://seedsecuritylabs.org/Labs_20.04/Files/TCP_Attacks/Labsetup-arm.zip}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{\commonfolder/container/setup}
@@ -280,10 +289,15 @@ while True:
 \end{lstlisting}
 
 Let the attack run for at least one minute, then try to telnet 
-into the victim machine, and see whether you can succeed. Very likely that
-your attack will fail. Multiple issues can contribute to the failure 
+into the victim machine, and see whether you can succeed. 
+
+\paragraph{Submission} Please provide the filled-in code, a screenshot of the code running, and the failed telnet connection.
+In your code, make sure to explain what the code is doing and how you obtained the values.
+In addition, please explain the attack and why the telnet connection failed.
+
+\paragraph{Trouble shooting} Your attack may fail. Multiple issues can contribute to the failure 
 of the attack. They are listed in the following with guidelines 
-on how to address them. 
+on how to address them.
 
 \begin{itemize}
   \item \textbf{TCP cache issue:} See Note A below.
@@ -419,20 +433,21 @@ $ gcc -static -o synflood synflood.c
 
 
 Before launching the attack, please restore the queue size to its 
-original value. Please compare the results with the one 
+original value. 
+
+\paragraph{Submission} Please compare the results with the one 
 using the Python program, and explain the reason behind the difference. 
-
- 
-
+Also provide the filled-in code, a screenshot of the code running, and the failed telnet connection.
+In your code, make sure to explain what the code is doing and how you obtained the values.
 
 
 % -------------------------------------------
 % SUBSECTION
 % -------------------------------------------
-\subsection{Task 1.3: Enable the SYN Cookie Countermeasure}
+% \subsection{Task 1.3: Enable the SYN Cookie Countermeasure}
 
-Please enable the SYN cookie mechanism, and 
-run your attacks again, and compare the results. 
+% Please enable the SYN cookie mechanism, and 
+% run your attacks again, and compare the results. 
 
 
 
@@ -458,19 +473,31 @@ A and B.
 \paragraph{Launching the attack manually.} 
 Please use Scapy to conduct the TCP RST attack. 
 A skeleton code is provided in the following. You need to replace each
-\texttt{@@@@} with an actual value (you can get them using Wireshark):  
-
+\texttt{@@@@} with an actual value.
 
 \begin{lstlisting}
-#!/usr/bin/env python3
-from scapy.all import *
-
-ip  = IP(src="@@@@", dst="@@@@")
-tcp = TCP(sport=@@@@, dport=@@@@, flags="R", seq=@@@@)
-pkt = ip/tcp
-ls(pkt)
-send(pkt, verbose=0)
+  #!/usr/bin/env python3
+  from scapy.all import *
+  
+  ip  = IP(src="@@@@", dst="@@@@")
+  tcp = TCP(sport=@@@@, dport=@@@@, flags="R", seq=@@@@)
+  pkt = ip/tcp
+  ls(pkt)
+  send(pkt, verbose=0)
 \end{lstlisting}
+
+To get the values, use Wireshark. 
+When opening WireShark, select the \texttt{any} interface. 
+Then, under ``file'' hit the blue shark fin to start collecting data. 
+Start the telnet connection and then hit the red square in WireShark to stop the data collection.
+You can also set filters in WireShark such as:
+
+\begin{lstlisting}
+  (ip.src == XXXXX || ip.src == XXXXX) && ip.proto == tcp
+\end{lstlisting}
+
+\paragraph{Submission} Provide the filled-in code, a screenshot of the code running, a screenshot of the values in WireShark, and the telnet connection being reset.
+In your code, make sure to explain what the code is doing and how you obtained the values.
 
 \paragraph{Optional: Launching the attack automatically.} 
 Students are encouraged to write a program to launch the 
@@ -586,6 +613,10 @@ ls(pkt)
 send(pkt, verbose=0)
 \end{lstlisting}
 
+\paragraph{Submission} If done correctly, the telnet session will crash, however the result of the data will appear in WireShark.
+Please submit WireShark screenshots of both the command and the command's result to get full credit.
+In addition, submit the filled in code with explanations for how you obtained the values.
+
 
 \paragraph{Optional: Launching the attack automatically.}
 Students are encouraged to write a program to launch the
@@ -698,6 +729,14 @@ session between a user and the target server. You need to inject your
 malicious command into the hijacked session, so you can get a reverse
 shell on the target server. 
 
+\paragraph{Submission} Submit python code used to hijack the session with explanations on what the code is doing.
+Provide WireShark screenshots of the command being run and the reverse shell being established.
+
+\paragraph{Note} Bash commands need to be surrounded by a return character and a newline character:
+
+\begin{lstlisting}
+  \r CMD \n
+\end{lstlisting}
 
 
 
